@@ -1,13 +1,10 @@
 package pl.maropce.etutor.domain.quiz;
 
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
-import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 
 import java.util.List;
 
