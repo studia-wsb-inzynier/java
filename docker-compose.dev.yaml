@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    image: e-tutor-backend  # Obraz aplikacji
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    build:
+      context: .
+      dockerfile: Dockerfile  # Dockerfile Twojej aplikacji
+    ports:
+      - "8080:8080"

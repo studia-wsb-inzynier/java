@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    image: e-tutor-backend  # Obraz aplikacji
+    build:
+      context: .
+      dockerfile: Dockerfile  # Dockerfile Twojej aplikacji
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/etutor
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+
+    depends_on:
+      - db  # Aplikacja zależy od kontenera bazy danych
+  db:
+    image: postgres:latest  # Obraz PostgreSQL
+    environment:
+      POSTGRES_DB: etutor  # Nazwa bazy danych
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+

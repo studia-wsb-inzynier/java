@@ -1,0 +1,14 @@
+package pl.maropce.etutor.domain.user.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class AppUserDTO {
+
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+}
