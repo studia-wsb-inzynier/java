@@ -13,6 +13,7 @@ import pl.maropce.etutor.domain.quiz.QuizRepository;
 import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
+import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.Role;
 
 import java.util.List;
@@ -24,34 +25,36 @@ public class AppTest {
     private final QuestionRepository questionRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final AppUserRepository appUserRepository;
+    private final AppUserDetailsRepository appUserDetailsRepository;
 
     public AppTest(QuizRepository quizRepository, QuestionRepository questionRepository,
-                   PasswordEncoder passwordEncoder, AppUserRepository appUserRepository) {
+                   PasswordEncoder passwordEncoder, AppUserDetailsRepository appUserDetailsRepository) {
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.passwordEncoder = passwordEncoder;
-        this.appUserRepository = appUserRepository;
+        this.appUserDetailsRepository = appUserDetailsRepository;
     }
 
     @Bean
     @Transactional
     public ApplicationRunner initializeDatabase() {
         return args -> {
-            AppUserDetails appUserDetails = AppUserDetails.builder()
-                    .role(Role.TEACHER)
-                    .username("admin")
-                    .password(passwordEncoder.encode("admin"))
-                    .build();
 
             AppUser appUser = AppUser.builder()
-                    .appUserDetails(appUserDetails)
                     .firstName("Marek")
                     .lastName("Krosny")
                     .phoneNumber("654753734")
                     .build();
 
-            appUserRepository.save(appUser);
+            AppUserDetails appUserDetails = AppUserDetails.builder()
+                    .appUser(appUser)
+                    .role(Role.TEACHER)
+                    .username("admin")
+                    .password(passwordEncoder.encode("admin"))
+                    .build();
+
+            appUserDetailsRepository.save(appUserDetails);
+
 
             Quiz quiz = Quiz.builder()
                     .title("Quiz 1")
