@@ -53,7 +53,10 @@ public class QuizService {
        List<Question> questionList = new ArrayList<>();
        request.getQuestionList().forEach(question -> {
            Question questionBuild = Question.builder()
-                   .content(question.getContent())
+                   .question(question.getQuestion())
+                   .type(question.getType())
+                   .options(question.getOptions())
+                   .correctOptions(question.getCorrectOptions())
                    .quiz(quiz)
                    .build();
            questionRepository.save(questionBuild);

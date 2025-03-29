@@ -12,9 +12,9 @@ import java.util.List;
 @Setter
 public class CreateQuestionRequest {
 
-    @Size(min = 1, max = 250)
+    @Size(min = 1, max = 500)
     @NotBlank
-    private String content;
+    private String question;
 
     private QuestionType type;
 

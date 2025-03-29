@@ -34,7 +34,6 @@ public class AppTest {
         this.appUserRepository = appUserRepository;
     }
 
-
     @Bean
     @Transactional
     public ApplicationRunner initializeDatabase() {
@@ -60,7 +59,7 @@ public class AppTest {
             quizRepository.save(quiz);
 
             Question question1 = Question.builder()
-                    .content("Jaki język jest najlepszy?")
+                    .question("Jaki język jest najlepszy?")
                     .type(QuestionType.SINGLE)
                     .options(List.of("Python", "Java", "C#", "C++"))
                     .correctOptions(List.of("Java"))
@@ -68,7 +67,7 @@ public class AppTest {
                     .build();
 
             Question question2 = Question.builder()
-                    .content("Które typy danych są poprawne w języku Java")
+                    .question("Które typy danych są poprawne w języku Java")
                     .type(QuestionType.MULTI)
                     .options(List.of("int", "float", "number", "string", "String"))
                     .correctOptions(List.of("int", "float", "String"))
@@ -76,7 +75,7 @@ public class AppTest {
                     .build();
 
             Question question3 = Question.builder()
-                    .content("Ułóż te typy danych w kolejności ich rozmiaru od najmniejszego do największego")
+                    .question("Ułóż te typy danych w kolejności ich rozmiaru od najmniejszego do największego")
                     .type(QuestionType.ORDERING)
                     .options(List.of("int", "short", "byte", "double"))
                     .correctOptions(List.of("byte", "short", "int", "double"))

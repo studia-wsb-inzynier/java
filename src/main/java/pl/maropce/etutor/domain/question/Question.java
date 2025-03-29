@@ -19,7 +19,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String content;
+    @Column(length = 500)
+    private String question;
 
     @Enumerated(EnumType.STRING)
     private QuestionType type;

@@ -11,7 +11,7 @@ public class QuestionMapper {
 
         return QuestionDTO.builder()
                 .id(question.getId())
-                .content(question.getContent())
+                .question(question.getQuestion())
                 .type(question.getType())
                 .options(question.getOptions())
                 .correctOptions(question.getCorrectOptions())

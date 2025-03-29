@@ -13,7 +13,7 @@ import java.util.List;
 public class QuestionDTO {
 
     private String id;
-    private String content;
+    private String question;
 
     private QuestionType type;
 
