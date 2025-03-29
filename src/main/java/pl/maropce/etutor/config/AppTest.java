@@ -11,7 +11,6 @@ import pl.maropce.etutor.domain.question.QuestionType;
 import pl.maropce.etutor.domain.quiz.Quiz;
 import pl.maropce.etutor.domain.quiz.QuizRepository;
 import pl.maropce.etutor.domain.user.AppUser;
-import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.Role;
