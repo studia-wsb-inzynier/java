@@ -14,5 +14,6 @@ public class QuizDTO {
 
     private String id;
     private String title;
+    private String ownerId;
     private List<QuestionDTO> questionList;
 }

@@ -24,6 +24,7 @@ public class QuizMapper {
         return QuizDTO.builder()
                 .id(quiz.getId())
                 .title(quiz.getTitle())
+                .ownerId(quiz.getOwner() != null ? quiz.getOwner().getId() : null)
                 .questionList(questionList)
                 .build();
     }
