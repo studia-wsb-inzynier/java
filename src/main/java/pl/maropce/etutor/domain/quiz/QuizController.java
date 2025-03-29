@@ -43,11 +43,5 @@ public class QuizController {
         QuizDTO quizDTO = quizService.create(createQuizRequest, appUserDetails);
         return ResponseEntity.ok(quizDTO);
     }
-
-    @GetMapping("/my")
-    public ResponseEntity<List<QuizDTO>> getMyQuizzes(@AuthenticationPrincipal AppUserDetails appUserDetails) {
-        List<QuizDTO> allByAuthenticatedUser = quizService.getAllByAuthenticatedUser(appUserDetails);
-        return ResponseEntity.ok(allByAuthenticatedUser);
-    }
 }
 
