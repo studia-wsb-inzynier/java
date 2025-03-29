@@ -8,6 +8,8 @@ import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.quiz.dto.QuizMapper;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
+import pl.maropce.etutor.domain.user_details.AppUserDetails;
+import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +20,13 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final QuizMapper quizMapper;
+    private final AppUserDetailsRepository appUserDetailsRepository;
 
-    public QuizService(QuizRepository quizRepository, QuestionRepository questionRepository, QuizMapper quizMapper) {
+    public QuizService(QuizRepository quizRepository, QuestionRepository questionRepository, QuizMapper quizMapper, AppUserDetailsRepository appUserDetailsRepository) {
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.quizMapper = quizMapper;
+        this.appUserDetailsRepository = appUserDetailsRepository;
     }
 
     public List<QuizDTO> getAll() {
@@ -43,7 +47,7 @@ public class QuizService {
     }
 
     @Transactional
-    public QuizDTO create(CreateQuizRequest request) {
+    public QuizDTO create(CreateQuizRequest request, AppUserDetails appUserDetails) {
 
        Quiz quiz = Quiz.builder()
                .title(request.getTitle())
@@ -64,6 +68,17 @@ public class QuizService {
        });
 
        quiz.setQuestionList(questionList);
+
+       appUserDetails.getAppUser().getQuizList().add(quiz);
+       appUserDetailsRepository.save(appUserDetails);
+
        return quizMapper.toDTO(quiz);
+    }
+
+    public List<QuizDTO> getAllByAuthenticatedUser(AppUserDetails appUserDetails) {
+        return appUserDetails.getAppUser().getQuizList()
+                .stream()
+                .map(quizMapper::toDTO)
+                .toList();
     }
 }

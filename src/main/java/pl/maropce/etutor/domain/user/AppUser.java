@@ -3,11 +3,9 @@ package pl.maropce.etutor.domain.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 import pl.maropce.etutor.domain.quiz.Quiz;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,6 +27,6 @@ public class AppUser {
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private AppUserDetails appUserDetails;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     List<Quiz> quizList;
 }

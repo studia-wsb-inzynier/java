@@ -25,10 +25,11 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionType type;
 
-    @ElementCollection
+
+    @ElementCollection(fetch = FetchType.EAGER)
     List<String> options = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     List<String> correctOptions = new ArrayList<>();
 
     @ManyToOne
