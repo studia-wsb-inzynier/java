@@ -1,10 +1,10 @@
 package pl.maropce.etutor.domain.user;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,10 +16,18 @@ public class AppUserController {
         this.appUserService = appUserService;
     }
 
-    @GetMapping
-    public ResponseEntity<String> getAllUsers() {
-        //appUserService.getAllUsers();
+    @PatchMapping("/{id}/quizzes/{quizId}")
+    public ResponseEntity<Void> addQuizToUser(@PathVariable String id, @PathVariable String quizId) {
+        appUserService.addQuizToUser(id, quizId);
 
-        return ResponseEntity.ok().body("ALL USERS HERE");
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/{id}/quizzes")
+    public ResponseEntity<List<QuizDTO>> getUserQuizzes(@PathVariable String id) {
+        List<QuizDTO> userQuizzes = appUserService.getUserQuizzes(id);
+
+        return ResponseEntity.ok(userQuizzes);
     }
 }
