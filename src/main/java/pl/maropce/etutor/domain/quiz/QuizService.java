@@ -69,11 +69,4 @@ public class QuizService {
 
        return quizMapper.toDTO(quiz);
     }
-
-    public List<QuizDTO> getAllByAuthenticatedUser(AppUserDetails appUserDetails) {
-        return appUserDetails.getAppUser().getQuizList()
-                .stream()
-                .map(quizMapper::toDTO)
-                .toList();
-    }
 }
