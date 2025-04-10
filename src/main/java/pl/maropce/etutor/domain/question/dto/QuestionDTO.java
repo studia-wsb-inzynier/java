@@ -18,5 +18,5 @@ public class QuestionDTO {
     private QuestionType questionType;
 
     private List<String> options;
-    private List<String> correctOptions;
+    private List<String> correctAnswer;
 }

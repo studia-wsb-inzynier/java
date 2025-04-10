@@ -60,3 +60,6 @@ springdoc:
 #      springframework:
 #        security: TRACE
 #        session: TRACE
+quiz:
+  generator:
+    url: "http://localhost:8000/"

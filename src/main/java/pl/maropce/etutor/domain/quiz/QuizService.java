@@ -1,14 +1,16 @@
 package pl.maropce.etutor.domain.quiz;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import pl.maropce.etutor.domain.question.Question;
 import pl.maropce.etutor.domain.question.QuestionRepository;
-import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
-import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
-import pl.maropce.etutor.domain.quiz.dto.QuizMapper;
+import pl.maropce.etutor.domain.question.dto.QuestionDTO;
+import pl.maropce.etutor.domain.quiz.dto.*;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,9 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final QuizMapper quizMapper;
+
+    @Value("${quiz.generator.url}")
+    private String quizURL;
 
     public QuizService(QuizRepository quizRepository, QuestionRepository questionRepository, QuizMapper quizMapper) {
         this.quizRepository = quizRepository;
@@ -68,5 +73,25 @@ public class QuizService {
        quiz.setQuestionList(questionList);
 
        return quizMapper.toDTO(quiz);
+    }
+
+    public List<QuestionDTO> generateQuizWithAI(GenerateQuizRequest request, AppUserDetails appUserDetails) {
+        WebClient webClient = WebClient.builder()
+                .baseUrl(quizURL)
+                .build();
+
+        request.setUserId(appUserDetails.getAppUser().getId());
+        System.out.println(request);
+
+        GenerateQuizResponse response = webClient.post()
+                .uri("/api/quiz/generate")
+                //.bodyValue(request)
+                .body(Mono.just(request), GenerateQuizRequest.class)
+                .retrieve()
+                .bodyToMono(GenerateQuizResponse.class)
+                .block();
+
+
+        return response.getQuestions();
     }
 }

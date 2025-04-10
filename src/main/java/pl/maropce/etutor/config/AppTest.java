@@ -53,6 +53,8 @@ public class AppTest {
                     .build();
 
             appUserDetailsRepository.save(appUserDetails);
+            appUserDetails.setAppUser(appUser);
+
 
 
             Quiz quiz = Quiz.builder()
@@ -78,7 +80,7 @@ public class AppTest {
 
             Question question3 = Question.builder()
                     .question("Ułóż te typy danych w kolejności ich rozmiaru od najmniejszego do największego")
-                    .type(QuestionType.ORDERING)
+                    .type(QuestionType.ORDER)
                     .options(List.of("int", "short", "byte", "double"))
                     .correctOptions(List.of("byte", "short", "int", "double"))
                     .quiz(quiz)

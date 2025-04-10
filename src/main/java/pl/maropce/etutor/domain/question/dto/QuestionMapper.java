@@ -1,6 +1,5 @@
 package pl.maropce.etutor.domain.question.dto;
 
-
 import org.springframework.stereotype.Component;
 import pl.maropce.etutor.domain.question.Question;
 
@@ -12,9 +11,9 @@ public class QuestionMapper {
         return QuestionDTO.builder()
                 .id(question.getId())
                 .question(question.getQuestion())
-                .type(question.getType())
+                .questionType(question.getType())
                 .options(question.getOptions())
-                .correctOptions(question.getCorrectOptions())
+                .correctAnswer(question.getCorrectOptions())
                 .build();
     }
 }

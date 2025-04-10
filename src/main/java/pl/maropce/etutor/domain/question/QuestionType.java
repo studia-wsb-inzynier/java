@@ -1,8 +1,13 @@
 package pl.maropce.etutor.domain.question;
 
 public enum QuestionType {
-    SINGLE,
-    MULTI,
-    FILL,
-    ORDERING
+    SINGLE("single"),
+    MULTI("multi"),
+    FILL("fill"),
+    ORDER("order");
+
+    private final String value;
+    QuestionType(String value) {
+        this.value = value;
+    }
 }

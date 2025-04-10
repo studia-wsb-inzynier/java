@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import pl.maropce.etutor.domain.question.dto.QuestionDTO;
 import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
+import pl.maropce.etutor.domain.quiz.dto.GenerateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
@@ -41,6 +43,13 @@ public class QuizController {
     public ResponseEntity<QuizDTO> createQuiz(@RequestBody @Valid CreateQuizRequest createQuizRequest,
                                               @AuthenticationPrincipal AppUserDetails appUserDetails) {
         QuizDTO quizDTO = quizService.create(createQuizRequest, appUserDetails);
+        return ResponseEntity.ok(quizDTO);
+    }
+
+    @PostMapping("/generate-questions")
+    public ResponseEntity<List<QuestionDTO>> generateQuiz(@RequestBody GenerateQuizRequest generateQuizRequest,
+                                                          @AuthenticationPrincipal AppUserDetails appUserDetails) {
+        List<QuestionDTO> quizDTO = quizService.generateQuizWithAI(generateQuizRequest, appUserDetails);
         return ResponseEntity.ok(quizDTO);
     }
 }
