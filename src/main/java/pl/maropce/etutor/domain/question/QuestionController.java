@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.maropce.etutor.domain.question.dto.QuestionDTO;
 import pl.maropce.etutor.domain.quiz.dto.GenerateQuizRequest;
@@ -11,7 +12,8 @@ import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 import java.util.List;
 
-@RestController("/api/questions")
+@RestController
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -23,7 +25,7 @@ public class QuestionController {
     @PostMapping("/generate")
     public ResponseEntity<List<QuestionDTO>> generateQuiz(@RequestBody GenerateQuizRequest generateQuizRequest,
                                                           @AuthenticationPrincipal AppUserDetails appUserDetails) {
-        List<QuestionDTO> quizDTO = questionService.generateQuizWithAI(generateQuizRequest, appUserDetails);
+        List<QuestionDTO> quizDTO = questionService.generateQuestionsWithAI(generateQuizRequest, appUserDetails);
         return ResponseEntity.ok(quizDTO);
     }
 }

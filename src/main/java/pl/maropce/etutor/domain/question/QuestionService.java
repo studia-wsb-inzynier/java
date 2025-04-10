@@ -17,7 +17,7 @@ public class QuestionService {
     @Value("${quiz.generator.url}")
     private String quizURL;
 
-    public List<QuestionDTO> generateQuizWithAI(GenerateQuizRequest request, AppUserDetails appUserDetails) {
+    public List<QuestionDTO> generateQuestionsWithAI(GenerateQuizRequest request, AppUserDetails appUserDetails) {
         WebClient webClient = WebClient.builder()
                 .baseUrl(quizURL)
                 .build();
