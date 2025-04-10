@@ -91,7 +91,6 @@ public class QuizService {
                 .bodyToMono(GenerateQuizResponse.class)
                 .block();
 
-
         return response.getQuestions();
     }
 }
