@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    //@GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String firstName;
@@ -24,6 +24,7 @@ public class AppUser {
     private String phoneNumber;
 
     @JsonIgnore
+    @MapsId
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private AppUserDetails appUserDetails;
 

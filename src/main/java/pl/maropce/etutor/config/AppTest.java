@@ -52,9 +52,9 @@ public class AppTest {
                     .password(passwordEncoder.encode("admin"))
                     .build();
 
-            appUserDetailsRepository.save(appUserDetails);
-            appUserDetails.setAppUser(appUser);
+            appUser.setAppUserDetails(appUserDetails);
 
+            appUserDetailsRepository.save(appUserDetails);
 
 
             Quiz quiz = Quiz.builder()
