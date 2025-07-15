@@ -16,7 +16,6 @@ import java.util.List;
 @Builder
 public class AppUser {
     @Id
-    //@GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String firstName;
