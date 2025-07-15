@@ -54,9 +54,9 @@ public class QuizService {
        request.getQuestionList().forEach(question -> {
            Question questionBuild = Question.builder()
                    .question(question.getQuestion())
-                   .type(question.getType())
+                   .type(question.getQuestionType())
                    .options(question.getOptions())
-                   .correctOptions(question.getCorrectOptions())
+                   .correctOptions(question.getCorrectAnswer())
                    .quiz(quiz)
                    .build();
            questionRepository.save(questionBuild);

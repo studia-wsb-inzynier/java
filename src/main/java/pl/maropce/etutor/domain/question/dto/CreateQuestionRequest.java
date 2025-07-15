@@ -16,9 +16,9 @@ public class CreateQuestionRequest {
     @NotBlank
     private String question;
 
-    private QuestionType type;
+    private QuestionType questionType;
 
     private List<String> options;
 
-    private List<String> correctOptions;
+    private List<String> correctAnswer;
 }
