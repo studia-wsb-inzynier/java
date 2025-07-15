@@ -60,4 +60,13 @@ public class AuthController {
         return ResponseEntity.ok(appUserService.register(registerRequest));
 
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<AppUser> getCurrentUser(@AuthenticationPrincipal AppUserDetails appUserDetails) {
+        if (appUserDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(appUserDetails.getAppUser());
+    }
 }
