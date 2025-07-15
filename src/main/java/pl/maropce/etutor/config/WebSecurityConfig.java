@@ -23,23 +23,39 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter ) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .headers(headers ->
-                    headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(AbstractHttpConfigurer::disable);
+            .cors(cors -> cors
+                .configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(
+                        java.util.List.of("http://localhost:3000")
+                    );
+                    corsConfig.setAllowedMethods(
+                        java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    );
+                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                })
+            )
+            .csrf(AbstractHttpConfigurer::disable)
+            .headers(headers ->
+                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+            )
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/api/auth/login").permitAll()
+                    .requestMatchers("/api/auth/register").permitAll()
+                    .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers("/").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .formLogin(AbstractHttpConfigurer::disable);
+
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
