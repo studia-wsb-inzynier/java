@@ -1,6 +1,7 @@
 package pl.maropce.etutor.domain.user;
 
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.quiz.Quiz;
@@ -10,6 +11,7 @@ import pl.maropce.etutor.domain.quiz.dto.QuizMapper;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
+import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
 import pl.maropce.etutor.domain.user_details.auth.RegisterRequest;
 
 import java.util.List;
@@ -68,5 +70,17 @@ public class AppUserService {
 
         appUser.getQuizList().add(quiz);
         appUserRepository.save(appUser);
+    }
+
+    public void changePassword(String username, ChangePasswordRequest request) {
+        AppUserDetails user = appUserDetailsRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        appUserDetailsRepository.save(user);
     }
 }
