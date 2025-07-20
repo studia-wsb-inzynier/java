@@ -1,6 +1,8 @@
 package pl.maropce.etutor.domain.quiz;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.question.Question;
 import pl.maropce.etutor.domain.question.QuestionRepository;
@@ -24,12 +26,10 @@ public class QuizService {
         this.quizMapper = quizMapper;
     }
 
-    public List<QuizDTO> getAll() {
-        List<Quiz> quizList = quizRepository.findAll();
+    public Page<QuizDTO> getAll(Pageable pageable) {
+        Page<Quiz> quizPage = quizRepository.findAll(pageable);
 
-        return quizList.stream()
-                .map(quizMapper::toDTO)
-                .toList();
+        return quizPage.map(quizMapper::toDTO);
     }
 
     public QuizDTO getById(String id) {

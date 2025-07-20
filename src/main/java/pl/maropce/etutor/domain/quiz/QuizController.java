@@ -1,14 +1,15 @@
 package pl.maropce.etutor.domain.quiz;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -21,8 +22,13 @@ public class QuizController {
     }
 
     @GetMapping
-    public ResponseEntity<List<QuizDTO>> getQuizzes() {
-        List<QuizDTO> all = quizService.getAll();
+    public ResponseEntity<Page<QuizDTO>> getQuizzes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<QuizDTO> all = quizService.getAll(pageable);
         return ResponseEntity.ok(all);
     }
 
