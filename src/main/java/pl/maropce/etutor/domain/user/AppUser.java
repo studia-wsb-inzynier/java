@@ -29,4 +29,15 @@ public class AppUser {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     List<Quiz> quizList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "teacher_student",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<AppUser> students;
+
+    @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
+    private List<AppUser> teachers;
 }

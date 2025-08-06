@@ -9,11 +9,14 @@ import pl.maropce.etutor.domain.quiz.QuizRepository;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.quiz.dto.QuizMapper;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
+import pl.maropce.etutor.domain.user.dto.AppUserDTO;
+import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
 import pl.maropce.etutor.domain.user_details.auth.RegisterRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,13 +27,15 @@ public class AppUserService {
     private final PasswordEncoder passwordEncoder;
     private final QuizMapper quizMapper;
     private final QuizRepository quizRepository;
+    private final AppUserMapper appUserMapper;
 
-    public AppUserService(AppUserRepository appUserRepository, AppUserDetailsRepository appUserDetailsRepository, PasswordEncoder passwordEncoder, QuizMapper quizMapper, QuizRepository quizRepository) {
+    public AppUserService(AppUserRepository appUserRepository, AppUserDetailsRepository appUserDetailsRepository, PasswordEncoder passwordEncoder, QuizMapper quizMapper, QuizRepository quizRepository, AppUserMapper appUserMapper) {
         this.appUserRepository = appUserRepository;
         this.appUserDetailsRepository = appUserDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.quizMapper = quizMapper;
         this.quizRepository = quizRepository;
+        this.appUserMapper = appUserMapper;
     }
 
     @Transactional
@@ -82,5 +87,20 @@ public class AppUserService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         appUserDetailsRepository.save(user);
+    }
+
+    public List<AppUserDTO> getContacts(String id) {
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<AppUserDTO> students = user.getStudents().stream().map(appUserMapper::toDTO).toList();
+        List<AppUserDTO> teachers = user.getTeachers().stream().map(appUserMapper::toDTO).toList();
+
+        List<AppUserDTO> contacts = new ArrayList<>();
+        contacts.addAll(students);
+        contacts.addAll(teachers);
+
+        return contacts;
+
     }
 }
