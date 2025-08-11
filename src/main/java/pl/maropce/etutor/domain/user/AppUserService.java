@@ -55,6 +55,8 @@ public class AppUserService {
                 .role(registerRequest.getRole())
                 .build();
 
+        appUser.setAppUserDetails(appUserDetails);
+
         return appUserDetailsRepository.save(appUserDetails);
     }
 
