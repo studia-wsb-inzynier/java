@@ -12,6 +12,7 @@ import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 import java.util.List;
 
+@Deprecated
 @RestController
 @RequestMapping("/api/questions")
 public class QuestionController {

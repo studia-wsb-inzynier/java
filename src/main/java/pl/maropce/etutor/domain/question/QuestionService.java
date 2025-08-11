@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@Deprecated
 @Service
 public class QuestionService {
 
