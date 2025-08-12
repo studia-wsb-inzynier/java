@@ -39,4 +39,11 @@ public class AppUserController {
         List<AppUserDTO> contacts = appUserService.getContacts(userDetails.getId());
         return ResponseEntity.ok(contacts);
     }
+
+    @DeleteMapping("contacts/delete/{contactId}")
+    public ResponseEntity<Void> deleteContact(@PathVariable String contactId, @AuthenticationPrincipal AppUserDetails userDetails) {
+        appUserService.deleteContact(contactId, userDetails.getId());
+
+        return ResponseEntity.noContent().build();
+    }
 }

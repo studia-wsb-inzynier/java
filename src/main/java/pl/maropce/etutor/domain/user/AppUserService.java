@@ -105,4 +105,21 @@ public class AppUserService {
         return contacts;
 
     }
+
+    @Transactional
+    public void deleteContact(String contactId, String appUserId) {
+
+        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        AppUser contactToDelete = appUserRepository.findById(contactId).orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        appUser.getStudents().remove(contactToDelete);
+        appUser.getTeachers().remove(contactToDelete);
+
+        contactToDelete.getStudents().remove(appUser);
+        contactToDelete.getTeachers().remove(appUser);
+
+        appUserRepository.save(appUser);
+        appUserRepository.save(contactToDelete);
+    }
 }
