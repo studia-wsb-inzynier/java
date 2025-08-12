@@ -14,8 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import pl.maropce.etutor.config.jwt.JwtUtil;
-import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserService;
+import pl.maropce.etutor.domain.user.dto.AppUserDTO;
+import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 @RestController
@@ -27,6 +28,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final AppUserService appUserService;
+    private final AppUserMapper appUserMapper;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody AuthRequest authRequest) {
@@ -60,12 +62,12 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<AppUser> getCurrentUser(@AuthenticationPrincipal AppUserDetails appUserDetails) {
+    public ResponseEntity<AppUserDTO> getCurrentUser(@AuthenticationPrincipal AppUserDetails appUserDetails) {
         if (appUserDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(appUserDetails.getAppUser());
+        return ResponseEntity.ok(appUserMapper.toDTO(appUserDetails.getAppUser()));
     }
 
     @PostMapping("/change-password")
