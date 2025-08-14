@@ -12,6 +12,7 @@ import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
+import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
@@ -63,7 +64,7 @@ public class AppUserService {
 
     public List<QuizDTO> getUserQuizzes(String id) {
         AppUser appUser = appUserRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found! Create an Exception for that!"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         return appUser.getQuizList().stream()
                 .map(quizMapper::toDTO)
@@ -72,7 +73,7 @@ public class AppUserService {
 
     public void addQuizToUser(String id, String quizId) {
         AppUser appUser = appUserRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found! Create an Exception for that!"));
+                .orElseThrow(() -> new UserNotFoundException(id));
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new QuizNotFoundException(quizId));
 
@@ -94,7 +95,7 @@ public class AppUserService {
 
     public List<AppUserDTO> getContacts(String id) {
         AppUser user = appUserRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         List<AppUserDTO> students = user.getStudents().stream().map(appUserMapper::toDTO).toList();
         List<AppUserDTO> teachers = user.getTeachers().stream().map(appUserMapper::toDTO).toList();
@@ -110,9 +111,9 @@ public class AppUserService {
     @Transactional
     public void deleteContact(String contactId, String appUserId) {
 
-        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new RuntimeException("User not found"));
+        AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new UserNotFoundException(appUserId));
 
-        AppUser contactToDelete = appUserRepository.findById(contactId).orElseThrow(() -> new RuntimeException("Contact not found"));
+        AppUser contactToDelete = appUserRepository.findById(contactId).orElseThrow(() -> new UserNotFoundException(contactId));
 
         appUser.getStudents().remove(contactToDelete);
         appUser.getTeachers().remove(contactToDelete);
@@ -127,7 +128,7 @@ public class AppUserService {
     @Transactional
     public AppUserDTO updateCurrentUser(String userId, UpdateAppUserDto dto) {
         AppUser appUser = appUserRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         if (dto.getFirstName() != null) appUser.setFirstName(dto.getFirstName());
         if (dto.getLastName() != null) appUser.setLastName(dto.getLastName());
