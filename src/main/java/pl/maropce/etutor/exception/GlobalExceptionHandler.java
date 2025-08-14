@@ -1,13 +1,9 @@
 package pl.maropce.etutor.exception;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.maropce.etutor.domain.quiz.Quiz;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 
