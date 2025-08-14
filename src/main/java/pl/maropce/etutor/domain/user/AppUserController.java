@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserDTO;
+import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class AppUserController {
         return ResponseEntity.noContent().build();
     }
 
-
     @GetMapping("/{id}/quizzes")
     public ResponseEntity<List<QuizDTO>> getUserQuizzes(@PathVariable String id) {
         List<QuizDTO> userQuizzes = appUserService.getUserQuizzes(id);
@@ -45,5 +45,14 @@ public class AppUserController {
         appUserService.deleteContact(contactId, userDetails.getId());
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<AppUserDTO> updateCurrentUser(
+            @AuthenticationPrincipal AppUserDetails userDetails,
+            @RequestBody UpdateAppUserDto dto) {
+
+        AppUserDTO updated = appUserService.updateCurrentUser(userDetails.getId(), dto);
+        return ResponseEntity.ok(updated);
     }
 }

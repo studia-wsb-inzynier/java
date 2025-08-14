@@ -11,6 +11,7 @@ import pl.maropce.etutor.domain.quiz.dto.QuizMapper;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserMapper;
+import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
@@ -121,5 +122,19 @@ public class AppUserService {
 
         appUserRepository.save(appUser);
         appUserRepository.save(contactToDelete);
+    }
+
+    @Transactional
+    public AppUserDTO updateCurrentUser(String userId, UpdateAppUserDto dto) {
+        AppUser appUser = appUserRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (dto.getFirstName() != null) appUser.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null) appUser.setLastName(dto.getLastName());
+        if (dto.getPhoneNumber() != null) appUser.setPhoneNumber(dto.getPhoneNumber());
+
+        AppUser savedUser = appUserRepository.save(appUser);
+
+        return appUserMapper.toDTO(savedUser);
     }
 }
