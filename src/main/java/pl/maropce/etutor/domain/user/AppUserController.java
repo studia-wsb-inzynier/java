@@ -55,4 +55,13 @@ public class AppUserController {
         AppUserDTO updated = appUserService.updateCurrentUser(userDetails.getId(), dto);
         return ResponseEntity.ok(updated);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AppUserDTO> updateAnyUser(
+            @PathVariable String id,
+            @RequestBody UpdateAppUserDto dto) {
+
+        AppUserDTO updated = appUserService.updateAnyUser(id, dto);
+        return ResponseEntity.ok(updated);
+    }
 }

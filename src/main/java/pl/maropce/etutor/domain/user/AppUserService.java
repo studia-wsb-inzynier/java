@@ -137,4 +137,19 @@ public class AppUserService {
 
         return appUserMapper.toDTO(savedUser);
     }
+
+    @Transactional
+    public AppUserDTO updateAnyUser(String userId, UpdateAppUserDto dto) {
+
+        AppUser appUser = appUserRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        if (dto.getFirstName() != null) appUser.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null) appUser.setLastName(dto.getLastName());
+        if (dto.getPhoneNumber() != null) appUser.setPhoneNumber(dto.getPhoneNumber());
+
+        AppUser savedUser = appUserRepository.save(appUser);
+
+        return appUserMapper.toDTO(savedUser);
+    }
 }

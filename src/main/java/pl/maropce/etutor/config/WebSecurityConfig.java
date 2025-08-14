@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import pl.maropce.etutor.config.jwt.JwtAuthenticationFilter;
+import pl.maropce.etutor.domain.user_details.Role;
 
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/invitation/generate-code").hasAnyRole("TEACHER", "ADMIN")
+                        .requestMatchers("/api/invitation/generate-code").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
