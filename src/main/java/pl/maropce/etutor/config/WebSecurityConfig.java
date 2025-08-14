@@ -49,6 +49,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/api/invitation/generate-code").hasAnyRole("TEACHER", "ADMIN")
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
