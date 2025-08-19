@@ -23,7 +23,7 @@ public class Quiz {
 
     private String title;
 
-    @OneToOne
+    @ManyToOne
     private AppUser owner;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
