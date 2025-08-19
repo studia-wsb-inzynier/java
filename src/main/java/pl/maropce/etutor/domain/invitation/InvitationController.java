@@ -23,7 +23,8 @@ public class InvitationController {
 
     @PostMapping("/join/{code}")
     public ResponseEntity<String> joinTeacher(@PathVariable String code,
-                                              @AuthenticationPrincipal AppUserDetails appUserDetails) {
+                                              @AuthenticationPrincipal AppUserDetails appUserDetails
+    ) {
         invitationService.joinTeacherByCode(code, appUserDetails.getId());
 
         return ResponseEntity.ok("Contact added successfully!");

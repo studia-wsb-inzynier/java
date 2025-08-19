@@ -1,8 +1,10 @@
 package pl.maropce.etutor.domain.invitation;
 
 import org.springframework.stereotype.Service;
+import pl.maropce.etutor.domain.invitation.exception.InvalidInvitationCodeException;
 import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserRepository;
+import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,10 +39,10 @@ public class InvitationService {
 
     public void joinTeacherByCode(String code, String studentId) {
         AppUser student = appUserRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new UserNotFoundException("Student not found"));
 
         InvitationCode joinCode = invitationRepository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Invalid code"));
+                .orElseThrow(InvalidInvitationCodeException::new);
 
         AppUser teacher = joinCode.getTeacher();
 
