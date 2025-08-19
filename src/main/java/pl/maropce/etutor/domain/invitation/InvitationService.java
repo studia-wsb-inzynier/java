@@ -22,7 +22,7 @@ public class InvitationService {
 
     public String generateJoinCode(String teacherId) {
         AppUser teacher = appUserRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+                .orElseThrow(() -> new UserNotFoundException("Teacher not found"));
 
         String code = UUID.randomUUID().toString();
 
