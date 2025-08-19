@@ -20,6 +20,7 @@ import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
 import pl.maropce.etutor.domain.user_details.auth.RegisterRequest;
+import pl.maropce.etutor.domain.user_details.exception.InvalidCurrentPasswordException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,7 @@ public class AppUserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Current password is incorrect");
+            throw new InvalidCurrentPasswordException();
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
