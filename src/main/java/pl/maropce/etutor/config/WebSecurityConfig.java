@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/invitation/generate-code").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/users/contacts").authenticated()
                         .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()

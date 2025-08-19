@@ -1,6 +1,9 @@
 package pl.maropce.etutor.domain.user;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -93,7 +96,7 @@ public class AppUserService {
         appUserDetailsRepository.save(user);
     }
 
-    public List<AppUserDTO> getContacts(String id) {
+    public Page<AppUserDTO> getContacts(String id, Pageable pageable) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
@@ -104,7 +107,12 @@ public class AppUserService {
         contacts.addAll(students);
         contacts.addAll(teachers);
 
-        return contacts;
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), contacts.size());
+
+        List<AppUserDTO> pagedList = contacts.subList(start, end);
+
+        return new PageImpl<>(pagedList, pageable, contacts.size());
 
     }
 

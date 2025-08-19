@@ -1,5 +1,8 @@
 package pl.maropce.etutor.domain.user;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +38,13 @@ public class AppUserController {
     }
 
     @GetMapping("/contacts")
-    public ResponseEntity<List<AppUserDTO>> getContacts(@AuthenticationPrincipal AppUserDetails userDetails) {
-        List<AppUserDTO> contacts = appUserService.getContacts(userDetails.getId());
+    public ResponseEntity<Page<AppUserDTO>> getContacts(
+            @AuthenticationPrincipal AppUserDetails userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AppUserDTO> contacts = appUserService.getContacts(userDetails.getId(), pageable);
         return ResponseEntity.ok(contacts);
     }
 
