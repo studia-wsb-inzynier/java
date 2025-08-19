@@ -11,11 +11,10 @@ public class ExceptionResolver {
 
     private int statusCode;
     private String message;
-    private Map<String, String> errors;
 
     public ExceptionResolver(BaseException exception) {
         statusCode = exception.getStatusCode();
         message = exception.getMessage();
-        errors = exception.getErrors();
+
     }
 }
