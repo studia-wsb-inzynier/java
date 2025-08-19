@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/invitation/generate-code").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers("/api/users/contacts").authenticated()
+                        .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
