@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.question.Question;
-import pl.maropce.etutor.domain.question.QuestionRepository;
 import pl.maropce.etutor.domain.quiz.dto.*;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
