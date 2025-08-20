@@ -5,6 +5,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/invitation")
 public class InvitationController {
@@ -28,5 +30,12 @@ public class InvitationController {
         invitationService.joinTeacherByCode(code, appUserDetails.getId());
 
         return ResponseEntity.ok("Contact added successfully!");
+    }
+
+    @GetMapping("/my-codes")
+    public ResponseEntity<String> getMyCodes(@AuthenticationPrincipal AppUserDetails appUserDetails) {
+        List<String> myCodes = invitationService.getMyCodes(appUserDetails.getAppUser());
+
+        return ResponseEntity.ok(myCodes.toString());
     }
 }

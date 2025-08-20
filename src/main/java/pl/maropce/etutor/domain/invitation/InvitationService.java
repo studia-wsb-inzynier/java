@@ -7,7 +7,9 @@ import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class InvitationService {
@@ -54,5 +56,12 @@ public class InvitationService {
         appUserRepository.save(student);
 
         invitationRepository.delete(joinCode);
+    }
+
+    public List<String> getMyCodes(AppUser teacher) {
+        List<InvitationCode> allCodes = invitationRepository.findAllByTeacher(teacher);
+        return allCodes.stream()
+                .map(InvitationCode::getCode)
+                .toList();
     }
 }
