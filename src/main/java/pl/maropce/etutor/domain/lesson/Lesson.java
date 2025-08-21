@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.maropce.etutor.domain.user.AppUser;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity

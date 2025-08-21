@@ -12,7 +12,6 @@ import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/lessons")

@@ -1,6 +1,5 @@
 package pl.maropce.etutor.domain.lesson.dto;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import pl.maropce.etutor.domain.lesson.Lesson;
 
