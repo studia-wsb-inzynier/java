@@ -28,7 +28,7 @@ public class AppUser {
     private AppUserDetails appUserDetails;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    List<Quiz> quizList;
+    private List<Quiz> quizList;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
