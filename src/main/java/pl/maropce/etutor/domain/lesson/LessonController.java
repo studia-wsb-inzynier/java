@@ -2,6 +2,9 @@ package pl.maropce.etutor.domain.lesson;
 
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +47,31 @@ public class LessonController {
         LessonDTO lessonDTO = lessonService.updateLesson(id, lessonRequest);
 
         return ResponseEntity.ok(lessonDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<LessonDTO>> getAllLessons(
+            @AuthenticationPrincipal AppUserDetails appUserDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<LessonDTO> allLessonsByUserId = lessonService.getAllLessonsByUserId(appUserDetails.getAppUser(), pageable);
+
+        return ResponseEntity.ok(allLessonsByUserId);
+    }
+
+    @GetMapping("{lessonId}")
+    public ResponseEntity<LessonDTO> getLesson(@PathVariable String lessonId) {
+        LessonDTO lessonDTO = lessonService.getLessonById(lessonId);
+
+        return ResponseEntity.ok(lessonDTO);
+    }
+
+    @DeleteMapping("{lessonId}")
+    public ResponseEntity<Void> deleteLesson(@PathVariable String lessonId) {
+
+        lessonService.deleteLesson(lessonId);
+        return ResponseEntity.noContent().build();
     }
 }

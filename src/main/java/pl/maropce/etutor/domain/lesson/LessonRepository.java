@@ -1,5 +1,7 @@
 package pl.maropce.etutor.domain.lesson;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +22,7 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
      *      <li>:startDateTime < l.endDateTime</li>
      *      <li>:endDateTime > l.beginDateTime</li>
      * </ul>
-     *
+     * <p>
      * This means that overlapping time intervals are checked.
      * Additionally, a lesson will be found if in the given time interval
      * teacher or student have some lesson.
@@ -53,32 +55,38 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
      *      <li>:startDateTime &lt; l.endDateTime</li>
      *      <li>:endDateTime &gt; l.beginDateTime</li>
      * </ul>
-     *
+     * <p>
      * This means that overlapping time intervals are checked.
      * A lesson will be considered overlapping if either the teacher or the student
      * has a lesson in the given time interval, except for the lesson with the given ID.
      *
-     * @param startDateTime      the beginning of the time interval of a new lesson
-     * @param endDateTime        the end of the time interval of a new lesson
-     * @param teacher            the teacher of the potential lesson
-     * @param student            the student of the potential lesson
-     * @param excludedLessonId   the ID of a lesson to be excluded from the check
+     * @param startDateTime    the beginning of the time interval of a new lesson
+     * @param endDateTime      the end of the time interval of a new lesson
+     * @param teacher          the teacher of the potential lesson
+     * @param student          the student of the potential lesson
+     * @param excludedLessonId the ID of a lesson to be excluded from the check
      * @return {@code true} if there exists an overlapping lesson for the teacher or student,
-     *         excluding the lesson with the given ID
+     * excluding the lesson with the given ID
      */
-    @Query("SELECT COUNT(l) > 0 FROM Lesson l WHERE " +
-            "(:startDateTime < l.endDateTime AND :endDateTime > l.beginDateTime) " +
+    @Query("SELECT COUNT(lesson) > 0 FROM Lesson lesson WHERE " +
+            "(:startDateTime < lesson.endDateTime AND :endDateTime > lesson.beginDateTime) " +
             "AND " +
-            "(l.teacher = :teacher OR l.student = :teacher " +
-            "OR l.teacher = :student OR l.student = :student) " +
+            "(lesson.teacher = :teacher OR lesson.student = :teacher " +
+            "OR lesson.teacher = :student OR lesson.student = :student) " +
             "AND " +
-            "l.id != :excludedLessonId")
+            "lesson.id != :excludedLessonId")
     boolean existsOverlappingLessonExcludingLessonById(@Param("startDateTime") LocalDateTime startDateTime,
                                                        @Param("endDateTime") LocalDateTime endDateTime,
                                                        @Param("teacher") AppUser teacher,
                                                        @Param("student") AppUser student,
-                                                       @Param("excludedLessonId") String excludedLessonId);
+                                                       @Param("excludedLessonId") String excludedLessonId
+    );
 
+    @Query("SELECT lesson FROM Lesson lesson " +
+            "WHERE :user = lesson.teacher OR :user = lesson.student")
+    Page<Lesson> findAllByUser(@Param("user") AppUser user,
+                               Pageable pageable
+    );
 
 
 }

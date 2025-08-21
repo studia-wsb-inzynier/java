@@ -1,5 +1,7 @@
 package pl.maropce.etutor.domain.lesson;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.lesson.dto.CreateLessonRequest;
 import pl.maropce.etutor.domain.lesson.dto.LessonDTO;
@@ -11,6 +13,8 @@ import pl.maropce.etutor.domain.lesson.exception.LessonTimesOverlapException;
 import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
+
+import java.util.Optional;
 
 @Service
 public class LessonService {
@@ -80,4 +84,22 @@ public class LessonService {
         return lessonMapper.toDTO(updatetedLesson);
     }
 
+    public Page<LessonDTO> getAllLessonsByUserId(AppUser appUser, Pageable pageable) {
+
+        Page<Lesson> allLessons = lessonRepository.findAllByUser(appUser, pageable);
+
+        return allLessons.map(lessonMapper::toDTO);
+    }
+
+    public void deleteLesson(String lessonId) {
+        lessonRepository.deleteById(lessonId);
+    }
+
+    public LessonDTO getLessonById(String lessonId) {
+
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new LessonNotFoundException(lessonId));
+
+        return lessonMapper.toDTO(lesson);
+    }
 }
