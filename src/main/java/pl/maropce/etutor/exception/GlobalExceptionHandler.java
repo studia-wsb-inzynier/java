@@ -1,17 +1,21 @@
 package pl.maropce.etutor.exception;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @Value("${date-time.format}")
+    private String dateTimeFormat;
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ExceptionResolver> handleBaseException(BaseException ex) {
@@ -38,5 +42,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(baseException.getStatusCode())
                 .body(resolver);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<ExceptionResolver> handleDateTimeParseException(DateTimeParseException ex) {
+
+
+        BaseException baseException = new BaseException(400, ex.getParsedString() + " is not a valid date. Should match the following pattern: " + dateTimeFormat);
+
+        ExceptionResolver exceptionResolver = new ExceptionResolver(baseException);
+        return ResponseEntity.status(400).body(exceptionResolver);
     }
 }
