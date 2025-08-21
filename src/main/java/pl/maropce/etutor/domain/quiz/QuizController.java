@@ -7,9 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -45,9 +49,13 @@ public class QuizController {
 
     @PostMapping
     public ResponseEntity<QuizDTO> createQuiz(@RequestBody @Valid CreateQuizRequest createQuizRequest,
-                                              @AuthenticationPrincipal AppUserDetails appUserDetails) {
+                                              @AuthenticationPrincipal AppUserDetails appUserDetails) throws URISyntaxException {
         QuizDTO quizDTO = quizService.create(createQuizRequest, appUserDetails);
-        return ResponseEntity.ok(quizDTO);
+
+
+        URI location = new URI("/api/lessons/" + quizDTO.getId());
+
+        return ResponseEntity.created(location).body(quizDTO);
     }
 }
 
