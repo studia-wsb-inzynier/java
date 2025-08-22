@@ -1,11 +1,10 @@
 package pl.maropce.etutor.domain.user;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.quiz.Quiz;
 import pl.maropce.etutor.domain.quiz.QuizRepository;
@@ -16,55 +15,18 @@ import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
-import pl.maropce.etutor.domain.user_details.AppUserDetails;
-import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
-import pl.maropce.etutor.domain.user_details.auth.ChangePasswordRequest;
-import pl.maropce.etutor.domain.user_details.auth.RegisterRequest;
-import pl.maropce.etutor.domain.user_details.exception.InvalidCurrentPasswordException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
-    private final AppUserDetailsRepository appUserDetailsRepository;
-    private final PasswordEncoder passwordEncoder;
     private final QuizMapper quizMapper;
     private final QuizRepository quizRepository;
     private final AppUserMapper appUserMapper;
-
-    public AppUserService(AppUserRepository appUserRepository, AppUserDetailsRepository appUserDetailsRepository, PasswordEncoder passwordEncoder, QuizMapper quizMapper, QuizRepository quizRepository, AppUserMapper appUserMapper) {
-        this.appUserRepository = appUserRepository;
-        this.appUserDetailsRepository = appUserDetailsRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.quizMapper = quizMapper;
-        this.quizRepository = quizRepository;
-        this.appUserMapper = appUserMapper;
-    }
-
-    @Transactional
-    public AppUserDetails register(RegisterRequest registerRequest) {
-
-        AppUser appUser = AppUser.builder()
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .phoneNumber(registerRequest.getPhoneNumber())
-                .quizList(List.of())
-                .build();
-
-        AppUserDetails appUserDetails = AppUserDetails.builder()
-                .appUser(appUser)
-                .username(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .role(registerRequest.getRole())
-                .build();
-
-        appUser.setAppUserDetails(appUserDetails);
-
-        return appUserDetailsRepository.save(appUserDetails);
-    }
 
     public List<QuizDTO> getUserQuizzes(String id) {
         AppUser appUser = appUserRepository.findById(id)
@@ -83,18 +45,6 @@ public class AppUserService {
 
         appUser.getQuizList().add(quiz);
         appUserRepository.save(appUser);
-    }
-
-    public void changePassword(String username, ChangePasswordRequest request) {
-        AppUserDetails user = appUserDetailsRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new InvalidCurrentPasswordException();
-        }
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        appUserDetailsRepository.save(user);
     }
 
     public Page<AppUserDTO> getContacts(String id, Pageable pageable) {

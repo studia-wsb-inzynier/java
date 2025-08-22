@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST,"/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/api/auth/activate").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
