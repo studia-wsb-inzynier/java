@@ -56,6 +56,7 @@ public class AppTest {
                 .role(Role.ADMIN)
                 .username("admin")
                 .password(passwordEncoder.encode("admin"))
+                .isEnabled(true)
                 .build();
 
         appUser.setAppUserDetails(appUserDetails);
@@ -75,6 +76,7 @@ public class AppTest {
                 .role(Role.TEACHER)
                 .username("teacher")
                 .password(passwordEncoder.encode("teacher"))
+                .isEnabled(true)
                 .build();
 
         appUser2.setAppUserDetails(appUserDetails2);
@@ -94,6 +96,7 @@ public class AppTest {
                 .role(Role.STUDENT)
                 .username("student")
                 .password(passwordEncoder.encode("student"))
+                .isEnabled(true)
                 .build();
 
         appUser3.setAppUserDetails(appUserDetails3);

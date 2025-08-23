@@ -4,6 +4,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
+import pl.maropce.etutor.domain.user_details.exception.AccountNotActiveException;
 
 import java.util.Optional;
 
@@ -18,10 +20,14 @@ public class AppUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUserDetails> userDetails = appUserDetailsRepository.findByUsername(username);
-        if (userDetails.isEmpty()) {
-            throw new UsernameNotFoundException(username);
+        AppUserDetails userDetails = appUserDetailsRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        if (!userDetails.isEnabled()) {
+            throw new AccountNotActiveException();
         }
-        return userDetails.get();
+
+
+        return userDetails;
     }
 }

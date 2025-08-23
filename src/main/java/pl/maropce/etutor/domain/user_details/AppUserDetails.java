@@ -34,6 +34,8 @@ public class AppUserDetails implements UserDetails {
     @JsonIgnore
     private Role role;
 
+    private boolean isEnabled;
+
     @OneToOne(cascade = CascadeType.ALL)
     private AppUser appUser;
 
@@ -53,6 +55,8 @@ public class AppUserDetails implements UserDetails {
         return password;
     }
 
-
-
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 }

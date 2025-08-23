@@ -22,6 +22,7 @@ import pl.maropce.etutor.domain.user_details.auth.dto.AuthRequest;
 import pl.maropce.etutor.domain.user_details.auth.dto.AuthResponse;
 import pl.maropce.etutor.domain.user_details.auth.dto.ChangePasswordRequest;
 import pl.maropce.etutor.domain.user_details.auth.dto.RegisterRequest;
+import pl.maropce.etutor.domain.user_details.auth.user_activation_token.UserActivationTokenService;
 
 import java.net.URI;
 
@@ -38,6 +39,7 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
     private final AuthService authService;
     private final AppUserMapper appUserMapper;
+    private final UserActivationTokenService userActivationTokenService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody AuthRequest authRequest) {
@@ -88,10 +90,10 @@ public class AuthController {
     @GetMapping("/activate")
     public ResponseEntity<Void> activateAccount(@RequestParam String token) {
 
+        userActivationTokenService.activateUser(token);
 
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(frontEndUrl))
                 .build();
-
     }
 }

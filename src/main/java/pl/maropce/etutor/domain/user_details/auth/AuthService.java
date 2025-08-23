@@ -1,6 +1,7 @@
 package pl.maropce.etutor.domain.user_details.auth;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
 import pl.maropce.etutor.domain.user_details.auth.dto.ChangePasswordRequest;
 import pl.maropce.etutor.domain.user_details.auth.dto.RegisterRequest;
+import pl.maropce.etutor.domain.user_details.auth.user_activation_token.UserActivationToken;
+import pl.maropce.etutor.domain.user_details.auth.user_activation_token.UserActivationTokenRepository;
 import pl.maropce.etutor.domain.user_details.exception.InvalidCurrentPasswordException;
 
 import java.io.IOException;
@@ -20,21 +23,27 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AppUserDetailsRepository appUserDetailsRepository;
-
-    public AuthService(EmailService emailService, PasswordEncoder passwordEncoder, AppUserDetailsRepository appUserDetailsRepository) {
-        this.emailService = emailService;
-        this.passwordEncoder = passwordEncoder;
-        this.appUserDetailsRepository = appUserDetailsRepository;
-    }
+    private final UserActivationTokenRepository activationTokenRepository;
 
     @Transactional
     public AppUserDetails register(RegisterRequest registerRequest) {
 
+        AppUserDetails savedUser = createAppUserDetails(registerRequest);
+
+        UserActivationToken token = createActivationToken(savedUser);
+
+        sendActivationEmail(savedUser.getUsername(), token.getToken());
+
+        return savedUser;
+    }
+
+    private AppUserDetails createAppUserDetails(RegisterRequest registerRequest) {
         AppUser appUser = AppUser.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
@@ -47,19 +56,24 @@ public class AuthService {
                 .username(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(registerRequest.getRole())
+                .isEnabled(false)
                 .build();
 
         appUser.setAppUserDetails(appUserDetails);
 
-
-        AppUserDetails savedUser = appUserDetailsRepository.save(appUserDetails);
-
-        sendActivationEmail(appUserDetails.getUsername());
-
-        return savedUser;
+        return appUserDetailsRepository.save(appUserDetails);
     }
 
-    private void sendActivationEmail(String email) {
+    private UserActivationToken createActivationToken(AppUserDetails appUserDetails) {
+        UserActivationToken token = UserActivationToken.builder()
+                .appUserDetails(appUserDetails)
+                .token(UUID.randomUUID().toString())
+                .build();
+
+        return activationTokenRepository.save(token);
+    }
+
+    private void sendActivationEmail(String email, String token) {
 
         String htmlTemplate;
         try {
@@ -70,7 +84,8 @@ public class AuthService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String activationLink = buildActivationLink(UUID.randomUUID().toString());
+
+        String activationLink = buildActivationLink(token);
 
         String htmlContent = htmlTemplate.replace("{{activationLink}}", activationLink);
 
