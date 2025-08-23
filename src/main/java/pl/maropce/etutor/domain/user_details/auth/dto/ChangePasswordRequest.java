@@ -1,4 +1,4 @@
-package pl.maropce.etutor.domain.user_details.auth;
+package pl.maropce.etutor.domain.user_details.auth.dto;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

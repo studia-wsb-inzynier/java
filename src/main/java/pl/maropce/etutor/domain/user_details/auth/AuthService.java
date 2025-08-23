@@ -10,6 +10,8 @@ import pl.maropce.etutor.domain.email.EmailService;
 import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 import pl.maropce.etutor.domain.user_details.AppUserDetailsRepository;
+import pl.maropce.etutor.domain.user_details.auth.dto.ChangePasswordRequest;
+import pl.maropce.etutor.domain.user_details.auth.dto.RegisterRequest;
 import pl.maropce.etutor.domain.user_details.exception.InvalidCurrentPasswordException;
 
 import java.io.IOException;

@@ -18,6 +18,10 @@ import pl.maropce.etutor.config.jwt.JwtUtil;
 import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
+import pl.maropce.etutor.domain.user_details.auth.dto.AuthRequest;
+import pl.maropce.etutor.domain.user_details.auth.dto.AuthResponse;
+import pl.maropce.etutor.domain.user_details.auth.dto.ChangePasswordRequest;
+import pl.maropce.etutor.domain.user_details.auth.dto.RegisterRequest;
 
 import java.net.URI;
 
