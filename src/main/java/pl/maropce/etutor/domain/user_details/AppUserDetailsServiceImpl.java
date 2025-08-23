@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 import pl.maropce.etutor.domain.user_details.exception.AccountNotActiveException;
 
-import java.util.Optional;
-
 @Service
 public class AppUserDetailsServiceImpl implements UserDetailsService {
 
