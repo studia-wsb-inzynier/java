@@ -12,18 +12,12 @@ Jej celem jest wsparcie korepetytorów w zarządzaniu uczniami oraz organizacji 
 
 ## Uruchamianie aplikacji
 
-Aplikacja działa w dwóch trybach: **dev** (baza H2, konsola pod `/h2-console`) i **prod** (PostgreSQL).
+Aplikacja działa w trybie: **dev** (baza H2, konsola pod `/h2-console`).
 
 ### Dev
 ```sh
 docker-compose -f docker-compose.dev.yaml build
 docker-compose -f docker-compose.dev.yaml up
-```
-
-### Prod
-```sh
-docker-compose -f docker-compose.prod.yaml build
-docker-compose -f docker-compose.prod.yaml up
 ```
 
 ## Dokumentacja API
