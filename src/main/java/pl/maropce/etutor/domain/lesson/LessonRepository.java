@@ -88,5 +88,15 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
                                Pageable pageable
     );
 
+    @Query("SELECT lesson FROM Lesson lesson " +
+            "WHERE (:user = lesson.teacher OR :user = lesson.student) " +
+            "AND lesson.beginDateTime BETWEEN :start AND :end")
+    Page<Lesson> findAllByUserAndBeginDateTimeBetween(
+            @Param("user") AppUser user,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable
+    );
+
 
 }

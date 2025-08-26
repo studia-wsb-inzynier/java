@@ -11,7 +11,7 @@ public class LessonMapper {
         return LessonDTO.builder()
                 .id(lesson.getId())
                 .title(lesson.getTitle())
-                .startDateTime(lesson.getBeginDateTime())
+                .beginDateTime(lesson.getBeginDateTime())
                 .endDateTime(lesson.getEndDateTime())
                 .teacher(lesson.getTeacher().getId())
                 .student(lesson.getStudent().getId())

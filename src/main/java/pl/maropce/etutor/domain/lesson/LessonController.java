@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -53,10 +54,21 @@ public class LessonController {
     public ResponseEntity<Page<LessonDTO>> getAllLessons(
             @AuthenticationPrincipal AppUserDetails appUserDetails,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "ALL") String rangeType,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer day
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<LessonDTO> allLessonsByUserId = lessonService.getAllLessonsByUserId(appUserDetails.getAppUser(), pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "beginDateTime"));
+
+        Page<LessonDTO> allLessonsByUserId = lessonService.getAllLessonsByUserId(
+                appUserDetails.getAppUser(),
+                pageable,
+                rangeType,
+                year,
+                month,
+                day);
 
         return ResponseEntity.ok(allLessonsByUserId);
     }

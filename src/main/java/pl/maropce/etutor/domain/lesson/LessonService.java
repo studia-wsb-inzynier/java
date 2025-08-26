@@ -10,11 +10,12 @@ import pl.maropce.etutor.domain.lesson.dto.UpdateLessonRequest;
 import pl.maropce.etutor.domain.lesson.exception.InvalidLessonDates;
 import pl.maropce.etutor.domain.lesson.exception.LessonNotFoundException;
 import pl.maropce.etutor.domain.lesson.exception.LessonTimesOverlapException;
+import pl.maropce.etutor.domain.lesson.exception.MissingDateRangeParametersException;
 import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 
-import java.util.Optional;
+import java.time.*;
 
 @Service
 public class LessonService {
@@ -84,11 +85,61 @@ public class LessonService {
         return lessonMapper.toDTO(updatetedLesson);
     }
 
-    public Page<LessonDTO> getAllLessonsByUserId(AppUser appUser, Pageable pageable) {
+    public Page<LessonDTO> getAllLessonsByUserId(AppUser appUser, Pageable pageable, String rangeType, Integer year, Integer month, Integer day) {
 
-        Page<Lesson> allLessons = lessonRepository.findAllByUser(appUser, pageable);
+        Page<Lesson> lessons;
 
-        return allLessons.map(lessonMapper::toDTO);
+        LocalDateTime beginDateTime;
+        LocalDateTime endDateTime;
+
+        switch (rangeType) {
+
+            case "MONTH" -> {
+                if (year == null || month == null){
+                    throw new MissingDateRangeParametersException("Year and month are required for MONTH range type");
+                }
+
+                YearMonth yearMonth = YearMonth.of(year, month);
+
+                beginDateTime = yearMonth.atDay(1).atTime(LocalTime.MIN);
+                endDateTime = yearMonth.atEndOfMonth().atTime(LocalTime.MAX);
+            }
+
+            case "WEEK" -> {
+                if (year == null || month == null || day == null){
+                    throw new MissingDateRangeParametersException("Year, month and day are required for DAY range type");
+                }
+
+                LocalDate date = LocalDate.of(year, month, day);
+
+                beginDateTime = date.with(DayOfWeek.MONDAY).atTime(LocalTime.MIN);
+                endDateTime = date.with(DayOfWeek.SUNDAY).atTime(LocalTime.MAX);
+            }
+
+            case "DAY" -> {
+                if (year == null || month == null || day == null){
+                    throw new MissingDateRangeParametersException("Year, month and day are required for DAY range type");
+                }
+
+                LocalDate date = LocalDate.of(year, month, day);
+
+                 beginDateTime = date.atTime(LocalTime.MIN);
+                endDateTime = date.atTime(LocalTime.MAX);
+
+            }
+
+            case "ALL" -> {
+                return lessonRepository.findAllByUser(appUser, pageable).map(lessonMapper::toDTO);
+            }
+
+            default -> {
+                return Page.empty(pageable);
+            }
+        }
+
+        lessons = lessonRepository.findAllByUserAndBeginDateTimeBetween(appUser, beginDateTime, endDateTime, pageable);
+
+        return lessons.map(lessonMapper::toDTO);
     }
 
     public void deleteLesson(String lessonId) {

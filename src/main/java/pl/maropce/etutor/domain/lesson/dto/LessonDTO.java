@@ -23,7 +23,7 @@ public class LessonDTO {
 
     @Future
     @NotNull
-    private LocalDateTime startDateTime;
+    private LocalDateTime beginDateTime;
 
     @Future
     @NotNull
