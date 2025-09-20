@@ -36,9 +36,6 @@ spring:
     activate:
       on-profile: dev
 
-server:
-  port: ${PORT:8080}
-
   mail:
     host: smtp.gmail.com
     port: 587
@@ -96,6 +93,9 @@ jwt:
 app:
   front-end:
     url: http://localhost:5173
+
+server:
+  port: ${PORT:8080}
 
 
 
