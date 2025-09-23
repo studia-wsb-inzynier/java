@@ -1,0 +1,20 @@
+# ================================================================
+#  Docker Compose configuration for development/testing ONLY.
+#  The database credentials below are REAL but limited to the TEST environment.
+#  They are NOT production credentials and carry no security risk.
+# ================================================================
+
+  version: '3'
+services:
+  app:
+    image: e-tutor-backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=postgresql://etutordb_user:5pBhNfPNWbkDCf7Egbl54uxYPLY4trHH@dpg-d39hmml6ubrc73e59id0-a/etutordb
+      - SPRING_DATASOURCE_USERNAME=etutordb_user
+      - SPRING_DATASOURCE_PASSWORD=5pBhNfPNWbkDCf7Egbl54uxYPLY4trHH
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
