@@ -3,6 +3,7 @@ package pl.maropce.etutor.config;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.maropce.etutor.domain.question.Question;
@@ -18,6 +19,7 @@ import pl.maropce.etutor.domain.user_details.Role;
 import java.util.List;
 
 @Component
+@Profile("dev")
 public class AppTest {
 
     private final QuizRepository quizRepository;

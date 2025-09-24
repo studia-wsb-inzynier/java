@@ -16,6 +16,7 @@ import pl.maropce.etutor.domain.user_details.auth.dto.RegisterRequest;
 import pl.maropce.etutor.domain.user_details.auth.user_activation_token.UserActivationToken;
 import pl.maropce.etutor.domain.user_details.auth.user_activation_token.UserActivationTokenRepository;
 import pl.maropce.etutor.domain.user_details.exception.InvalidCurrentPasswordException;
+import pl.maropce.etutor.domain.user_details.exception.UserAlreadyExistsException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +34,10 @@ public class AuthService {
 
     @Transactional
     public AppUserDetails register(RegisterRequest registerRequest) {
+
+        if (appUserDetailsRepository.existsByUsername(registerRequest.getEmail())) {
+            throw new UserAlreadyExistsException(registerRequest.getEmail());
+        }
 
         AppUserDetails savedUser = createAppUserDetails(registerRequest);
 
