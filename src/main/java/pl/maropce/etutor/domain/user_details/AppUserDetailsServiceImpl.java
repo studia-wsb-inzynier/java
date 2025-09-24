@@ -25,7 +25,6 @@ public class AppUserDetailsServiceImpl implements UserDetailsService {
             throw new AccountNotActiveException();
         }
 
-
         return userDetails;
     }
 }
