@@ -51,10 +51,6 @@ app:
 server:
   port: ${PORT:8080}
 
-
-quiz:
-  generator:
-    url: "http://localhost:8000/"
 ---
 
 spring:
@@ -105,9 +101,6 @@ springdoc:
 #      springframework:
 #        security: TRACE
 #        session: TRACE
-quiz:
-  generator:
-    url: "http://localhost:8000/"
 
 date-time:
   format: "dd-MM-yyyy HH:mm"
