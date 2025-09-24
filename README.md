@@ -12,12 +12,51 @@ Jej celem jest wsparcie korepetytorów w zarządzaniu uczniami oraz organizacji 
 
 ## Uruchamianie aplikacji
 
-Aplikacja działa w trybie: **dev** (baza H2, konsola pod `/h2-console`).
+## Konfiguracja
+
+### Plik `.env`
+
+Przykładowy plik znajduje się w:  
+.env.example
+
+Skopiuj go jako `.env` i uzupełnij swoje dane.  
+Przykład:
+```env
+# ========================
+# Database configuration
+# ========================
+# Used only in 'prod' profile
+SPRING_DATASOURCE_URL=jdbc:postgresql://HOST:PORT/DB_NAME
+SPRING_DATASOURCE_USERNAME=your_db_username
+SPRING_DATASOURCE_PASSWORD=your_db_password
+
+# ========================
+# Email configuration
+# ========================
+# Used in 'prod' and 'dev' profiles
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_email_password
+```
+
+- **dev**
+    - Baza: H2 (w pamięci)
+    - Konsola H2 dostępna pod: [`/h2-console`](http://localhost:8080/h2-console)
+- **prod**
+    - Baza: PostgreSQL
+    - Konfiguracja bazy i danych logowania w pliku `.env`
 
 ### Dev
 ```sh
 docker-compose -f docker-compose.dev.yaml build
 docker-compose -f docker-compose.dev.yaml up
+```
+
+### Prod
+```sh
+docker-compose -f docker-compose.prod.yaml build
+docker-compose -f docker-compose.prod.yaml up
 ```
 
 ## Dokumentacja API
