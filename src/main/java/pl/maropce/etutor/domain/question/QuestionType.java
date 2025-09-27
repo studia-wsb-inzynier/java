@@ -4,5 +4,6 @@ public enum QuestionType {
     SINGLE,
     MULTI,
     FILL,
-    ORDER
+    ORDER,
+    TRUE_FALSE
 }
