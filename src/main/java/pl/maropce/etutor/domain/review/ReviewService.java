@@ -1,6 +1,8 @@
 package pl.maropce.etutor.domain.review;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.review.dto.CreateReviewRequest;
 import pl.maropce.etutor.domain.review.dto.ReviewDTO;
@@ -21,18 +23,14 @@ public class ReviewService {
     private final AppUserRepository appUserRepository;
     private final pl.maropce.etutor.domain.review.dto.ReviewMapper reviewMapper;
 
-    public List<ReviewDTO> getReviewsForUser(String userId) {
-        return reviewRepository.findByReviewer_Id(userId)
-                .stream()
-                .map(reviewMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<ReviewDTO> getReviewsForUser(String userId, Pageable pageable) {
+        return reviewRepository.findByReviewer_Id(userId, pageable)
+                .map(reviewMapper::toDTO);
     }
 
-    public List<ReviewDTO> getReviewsByAuthor(String authorId) {
-        return reviewRepository.findByAuthor_Id(authorId)
-                .stream()
-                .map(reviewMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<ReviewDTO> getReviewsByAuthor(String authorId, Pageable pageable) {
+        return reviewRepository.findByAuthor_Id(authorId, pageable)
+                .map(reviewMapper::toDTO);
     }
 
 
