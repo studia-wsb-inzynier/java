@@ -12,8 +12,6 @@ import pl.maropce.etutor.domain.review.dto.CreateReviewRequest;
 import pl.maropce.etutor.domain.review.dto.ReviewDTO;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor

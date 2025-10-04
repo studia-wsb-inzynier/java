@@ -15,7 +15,12 @@ public class ReviewDTO {
 
     private String comment;
 
-    private String author;
-    private String reviewer;
+    private String authorId;
+    private String authorName;
+    private String authorLastName;
+
+    private String reviewerId;
+    private String reviewerName;
+    private String reviewerLastName;
 
 }

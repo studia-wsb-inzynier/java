@@ -12,8 +12,12 @@ public class ReviewMapper {
                 .id(review.getId())
                 .rating(review.getRating())
                 .comment(review.getComment())
-                .author(review.getAuthor().getId())
-                .reviewer(review.getReviewer().getId())
+                .authorId(review.getAuthor().getId())
+                .authorName(review.getAuthor().getFirstName())
+                .authorLastName(review.getAuthor().getLastName())
+                .reviewerId(review.getReviewer().getId())
+                .reviewerName(review.getReviewer().getFirstName())
+                .reviewerLastName(review.getReviewer().getLastName())
                 .build();
     }
 }

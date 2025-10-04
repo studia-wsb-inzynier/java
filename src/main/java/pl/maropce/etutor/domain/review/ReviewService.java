@@ -12,9 +12,6 @@ import pl.maropce.etutor.domain.user.AppUser;
 import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
