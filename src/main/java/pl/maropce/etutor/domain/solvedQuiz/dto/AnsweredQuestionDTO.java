@@ -15,6 +15,7 @@ public class AnsweredQuestionDTO {
     private String id;
     private String question;
     private QuestionType type;
+    private boolean correct;
     private List<String> allOptions;
     private List<String> selectedOptions;
     private List<String> correctOptions;

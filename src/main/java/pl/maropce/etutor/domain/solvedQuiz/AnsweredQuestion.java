@@ -23,6 +23,8 @@ public class AnsweredQuestion {
 
     private QuestionType type;
 
+    private boolean correct;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> allOptions = new ArrayList<>();
 
