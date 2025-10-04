@@ -1,9 +1,7 @@
 package pl.maropce.etutor.domain.solvedQuiz.dto;
 
 import org.springframework.stereotype.Component;
-import pl.maropce.etutor.domain.solvedQuiz.AnsweredQuestion;
 import pl.maropce.etutor.domain.solvedQuiz.SolvedQuiz;
-import pl.maropce.etutor.domain.solvedQuiz.SolvedQuizService;
 
 import java.util.stream.Collectors;
 
