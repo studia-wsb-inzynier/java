@@ -18,5 +18,5 @@ public class CreateQuizRequest {
     private String title;
 
     @Valid
-    List<CreateQuestionRequest> questionList;
+    List<CreateQuestionRequest> questions;
 }
