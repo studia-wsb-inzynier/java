@@ -47,7 +47,7 @@ public class QuizService {
                .build();
 
        List<Question> questionList = new ArrayList<>();
-       request.getQuestionList().forEach(question -> {
+       request.getQuestions().forEach(question -> {
            Question questionBuild = Question.builder()
                    .question(question.getQuestion())
                    .type(question.getQuestionType())
