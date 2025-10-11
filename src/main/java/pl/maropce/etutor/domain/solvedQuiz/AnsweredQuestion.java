@@ -35,5 +35,6 @@ public class AnsweredQuestion {
     private List<String> correctOptions = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "solved_quiz_id")
     private SolvedQuiz solvedQuiz;
 }
