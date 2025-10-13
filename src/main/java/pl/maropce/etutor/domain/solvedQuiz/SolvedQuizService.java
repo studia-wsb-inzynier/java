@@ -1,5 +1,6 @@
 package pl.maropce.etutor.domain.solvedQuiz;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ public class SolvedQuizService {
         return allBySolver.map(solvedQuizMapper::toDTO);
     }
 
+    @Transactional
     public SolvedQuizDTO solveQuiz(String quizId, Map<String, List<String>> answers, String solverId) {
 
         if(solvedQuizRepository.existsByQuiz_IdAndSolver_Id(quizId, solverId)) {
@@ -73,6 +75,9 @@ public class SolvedQuizService {
         });
 
         SolvedQuiz saved = solvedQuizRepository.save(solvedQuiz);
+
+        solver.getQuizList().remove(quiz);
+        appUserRepository.save(solver);
         return solvedQuizMapper.toDTO(saved);
     }
 
