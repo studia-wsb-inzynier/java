@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/users/contacts").authenticated()
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/quizzes/{id}").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST,"/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers("/api/auth/activate").permitAll()
