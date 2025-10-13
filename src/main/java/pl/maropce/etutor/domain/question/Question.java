@@ -19,7 +19,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String question;
 
     @Enumerated(EnumType.STRING)

@@ -19,6 +19,7 @@ public class AnsweredQuestion {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(length = 1000)
     private String question;
 
     private QuestionType type;

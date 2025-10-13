@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class CreateQuestionRequest {
 
-    @Size(min = 1, max = 500)
+    @Size(min = 1, max = 850)
     @NotBlank
     private String question;
 
