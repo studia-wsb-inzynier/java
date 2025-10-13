@@ -1,27 +1,30 @@
 package pl.maropce.etutor.domain.quiz;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.maropce.etutor.domain.question.Question;
 import pl.maropce.etutor.domain.quiz.dto.*;
 import pl.maropce.etutor.domain.quiz.exception.QuizNotFoundException;
+import pl.maropce.etutor.domain.solvedQuiz.SolvedQuiz;
+import pl.maropce.etutor.domain.solvedQuiz.SolvedQuizRepository;
+import pl.maropce.etutor.domain.user.AppUser;
+import pl.maropce.etutor.domain.user.AppUserRepository;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class QuizService {
 
     private final QuizRepository quizRepository;
     private final QuizMapper quizMapper;
-
-    public QuizService(QuizRepository quizRepository, QuizMapper quizMapper) {
-        this.quizRepository = quizRepository;
-        this.quizMapper = quizMapper;
-    }
+    private final AppUserRepository appUserRepository;
+    private final SolvedQuizRepository solvedQuizRepository;
 
     public Page<QuizDTO> getAll(Pageable pageable) {
         Page<Quiz> quizPage = quizRepository.findAll(pageable);
@@ -34,9 +37,25 @@ public class QuizService {
         return quizMapper.toDTO(quiz);
     }
 
-    public void delete(String id) {
-        quizRepository.deleteById(id);
+    @Transactional
+    public void delete(String quizId) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new QuizNotFoundException(quizId));
+
+
+        List<SolvedQuiz> solvedQuizzes = solvedQuizRepository.findAllByQuiz(quiz);
+        for (SolvedQuiz sq : solvedQuizzes) {
+            sq.setQuiz(null);
+        }
+
+        List<AppUser> users = appUserRepository.findAllByQuizListContaining(quiz);
+        for (AppUser user : users) {
+            user.getQuizList().remove(quiz);
+        }
+
+        quizRepository.delete(quiz);
     }
+
 
     @Transactional
     public QuizDTO create(CreateQuizRequest request, AppUserDetails appUserDetails) {

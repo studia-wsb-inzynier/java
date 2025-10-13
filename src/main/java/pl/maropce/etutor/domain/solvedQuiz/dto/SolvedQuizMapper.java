@@ -18,7 +18,7 @@ public class SolvedQuizMapper {
         return SolvedQuizDTO.builder()
                 .id(solvedQuiz.getId())
                 .title(solvedQuiz.getTitle())
-                .quizId(solvedQuiz.getQuiz().getId())
+                .quizId(solvedQuiz.getQuiz() != null ? solvedQuiz.getQuiz().getId() : null)
                 .ownerId(solvedQuiz.getOwner().getId())
                 .solverId(solvedQuiz.getSolver().getId())
                 .answeredQuestions(solvedQuiz.getAnsweredQuestions()
