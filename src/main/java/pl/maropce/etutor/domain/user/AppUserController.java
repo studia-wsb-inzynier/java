@@ -10,6 +10,7 @@ import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -46,6 +47,18 @@ public class AppUserController {
         Pageable pageable = PageRequest.of(page, size);
         Page<AppUserDTO> contacts = appUserService.getContacts(userDetails.getId(), pageable);
         return ResponseEntity.ok(contacts);
+    }
+
+    @GetMapping("/contacts/{id}")
+    public ResponseEntity<AppUserDTO> getContactDetails(
+            @AuthenticationPrincipal AppUserDetails userDetails,
+            @PathVariable String id
+    ) {
+        AppUserDTO contact = appUserService.getContactDetails(userDetails.getId(), id);
+        if (contact == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(contact);
     }
 
     @DeleteMapping("contacts/delete/{contactId}")

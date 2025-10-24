@@ -67,6 +67,21 @@ public class AppUserService {
 
     }
 
+    public AppUserDTO getContactDetails(String currentUserId, String contactId) {
+        AppUser currentUser = appUserRepository.findById(currentUserId)
+                .orElseThrow(() -> new UserNotFoundException(currentUserId));
+
+        List<AppUser> contacts = new ArrayList<>();
+        contacts.addAll(currentUser.getStudents());
+        contacts.addAll(currentUser.getTeachers());
+
+        return contacts.stream()
+                .filter(contact -> contact.getId().equals(contactId))
+                .findFirst()
+                .map(appUserMapper::toDTO)
+                .orElse(null);
+    }
+
     @Transactional
     public void deleteContact(String contactId, String appUserId) {
 

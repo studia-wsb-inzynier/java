@@ -49,8 +49,8 @@ EMAIL_PASSWORD=your_email_password
 
 ### Dev
 ```sh
-docker-compose -f docker-compose.dev.yaml build
-docker-compose -f docker-compose.dev.yaml up
+docker compose -f docker-compose.dev.yaml build
+docker compose -f docker-compose.dev.yaml up
 ```
 
 ### Prod
