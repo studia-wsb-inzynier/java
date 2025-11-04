@@ -1,5 +1,5 @@
 # Użyj obrazu openjdk jako podstawy
-FROM maven:3.8.5-openjdk-17 AS build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 # Ustaw katalog roboczy
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Użyj oddzielnego obrazu openjdk dla uruchomienia aplikacji
-FROM openjdk:17-jdk-alpine
+FROM maven:3.9.9-eclipse-temurin-21
 
 # Ustaw katalog roboczy dla aplikacji
 WORKDIR /app
