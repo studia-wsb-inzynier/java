@@ -53,6 +53,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Token expired\"}");
         }
-
     }
 }

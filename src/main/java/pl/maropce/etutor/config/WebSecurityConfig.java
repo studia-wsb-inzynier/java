@@ -1,5 +1,6 @@
 package pl.maropce.etutor.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,9 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Value("${app.front-end.url}")
+    private String frontEndUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
 
@@ -32,7 +36,7 @@ public class WebSecurityConfig {
                         .configurationSource(request -> {
                             CorsConfiguration corsConfig = new CorsConfiguration();
                             corsConfig.setAllowedOrigins(
-                                    List.of("http://localhost:3000", "http://localhost:5173")
+                                    List.of(frontEndUrl)
                             );
                             corsConfig.setAllowedMethods(
                                     List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")

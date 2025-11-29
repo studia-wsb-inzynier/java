@@ -68,9 +68,7 @@ public class AuthController {
     public ResponseEntity<AppUserDetails> registerUser(
             @RequestBody @Valid RegisterRequest registerRequest
     ) {
-
         return ResponseEntity.ok(authService.register(registerRequest));
-
     }
 
     @GetMapping("/me")
