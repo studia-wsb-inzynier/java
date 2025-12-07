@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.maropce.etutor.domain.quiz.dto.CreateQuizRequest;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
 import pl.maropce.etutor.domain.user_details.AppUserDetails;

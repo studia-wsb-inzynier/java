@@ -51,18 +51,49 @@ public class WebSecurityConfig {
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                 )
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/invitation/generate-code").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/invitation/join/*").authenticated()
+                        .requestMatchers("/api/invitation/my-codes").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/api/lessons").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/lessons/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/lessons/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+
+                        .requestMatchers(HttpMethod.POST, "/api/quizzes").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/quizzes/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/quizzes").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/quizzes/*").hasAnyAuthority(Role.ADMIN.name())
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/reviews/*").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/*").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/reviews/user/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/author/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/reviewer/*").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "api/solved-quizzes").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/solved-quizzes").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/solved-quizzes/*").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/solved-quizzes/user/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+
+
+
+                        .requestMatchers(HttpMethod.PATCH, "/api/users/*/quizzes/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/users/*/quizzes").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/contacts").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/contacts/*").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/contacts/delete/*").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAuthority(Role.ADMIN.name())
+
+
+
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/invitation/generate-code").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-                        .requestMatchers("/api/users/contacts").authenticated()
-                        .requestMatchers("/api/users/me").authenticated()
-                        .requestMatchers("/api/users/*").hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/quizzes/{id}").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST,"/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.PUT, "/api/lessons").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers("/api/auth/activate").permitAll()
+
+                        .requestMatchers("/h2-console/**", "/docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

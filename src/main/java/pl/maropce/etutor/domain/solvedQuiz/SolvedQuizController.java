@@ -26,7 +26,6 @@ public class SolvedQuizController {
             @RequestBody SolveQuizRequest request,
             @AuthenticationPrincipal AppUserDetails appUserDetails
     ) {
-        System.out.println(appUserDetails);
         SolvedQuizDTO solvedQuiz = solvedQuizService.solveQuiz(request.getQuizId(), request.getAnswers(), appUserDetails.getAppUser().getId());
 
         return ResponseEntity.ok(solvedQuiz);
