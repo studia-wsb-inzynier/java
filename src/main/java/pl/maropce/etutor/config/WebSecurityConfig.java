@@ -62,8 +62,8 @@ public class WebSecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/api/quizzes").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/quizzes/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/quizzes").hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/quizzes/*").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "/api/quizzes").hasAnyAuthority(Role.ADMIN.name(), Role.TEACHER.name())
+                        .requestMatchers(HttpMethod.GET, "/api/quizzes/*").permitAll()
 
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/*").hasAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/reviews/*").authenticated()
@@ -75,8 +75,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/solved-quizzes").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/solved-quizzes/*").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/solved-quizzes/user/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
-
-
 
                         .requestMatchers(HttpMethod.PATCH, "/api/users/*/quizzes/*").hasAnyAuthority(Role.TEACHER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/users/*/quizzes").authenticated()
