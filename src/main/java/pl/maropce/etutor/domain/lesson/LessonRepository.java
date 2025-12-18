@@ -98,5 +98,7 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
             Pageable pageable
     );
 
+    void deleteLessonByTeacherAndStudent(AppUser user, AppUser student);
+
 
 }

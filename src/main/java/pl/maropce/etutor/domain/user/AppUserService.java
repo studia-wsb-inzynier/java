@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.maropce.etutor.domain.lesson.LessonRepository;
 import pl.maropce.etutor.domain.quiz.Quiz;
 import pl.maropce.etutor.domain.quiz.QuizRepository;
 import pl.maropce.etutor.domain.quiz.dto.QuizDTO;
@@ -15,6 +16,7 @@ import pl.maropce.etutor.domain.user.dto.AppUserDTO;
 import pl.maropce.etutor.domain.user.dto.AppUserMapper;
 import pl.maropce.etutor.domain.user.dto.UpdateAppUserDto;
 import pl.maropce.etutor.domain.user.exception.UserNotFoundException;
+import pl.maropce.etutor.domain.user_details.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private final QuizMapper quizMapper;
     private final QuizRepository quizRepository;
+    private final LessonRepository lessonRepository;
     private final AppUserMapper appUserMapper;
 
     public List<QuizDTO> getUserQuizzes(String id) {
@@ -88,6 +91,14 @@ public class AppUserService {
         AppUser appUser = appUserRepository.findById(appUserId).orElseThrow(() -> new UserNotFoundException(appUserId));
 
         AppUser contactToDelete = appUserRepository.findById(contactId).orElseThrow(() -> new UserNotFoundException(contactId));
+
+        if(appUser.getAppUserDetails().getRole().equals(Role.TEACHER) && contactToDelete.getAppUserDetails().getRole().equals(Role.STUDENT)) {
+            lessonRepository.deleteLessonByTeacherAndStudent(appUser, contactToDelete);
+        } else if (appUser.getAppUserDetails().getRole().equals(Role.STUDENT) && contactToDelete.getAppUserDetails().getRole().equals(Role.TEACHER)) {
+            lessonRepository.deleteLessonByTeacherAndStudent(contactToDelete, appUser);
+        }
+
+
 
         appUser.getStudents().remove(contactToDelete);
         appUser.getTeachers().remove(contactToDelete);
